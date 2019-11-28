@@ -3,6 +3,7 @@ class Contact:
         self.name = name
         self.message_count = 0
         self.word_count = 0
+        self.first_message_count = 0
 
     def avgWords(self):
         """
@@ -15,6 +16,12 @@ class Contact:
         increment messages count by one.
         """
         self.message_count += 1
+
+    def incrementFirstMessages(self):
+        """
+        increment first messages count by one.
+        """
+        self.first_message_count += 1
 
     def incrementWords(self, count):
         """
@@ -32,3 +39,6 @@ class Contact:
 
     def getWordCount(self):
         return self.word_count
+
+    def getFirstMessageCount(self):
+        return self.first_message_count

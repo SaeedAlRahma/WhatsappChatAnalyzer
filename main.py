@@ -1,4 +1,6 @@
 import sys
+import time
+
 from contact import Contact
 
 print("----- Script started!")
@@ -6,6 +8,7 @@ print("----- Script started!")
 # Constants
 PREFIX = "M - "
 SUFFIX = ": "
+FIRST_MESSAGE_TIME = 1*60*60 # One hour
 
 def printResults(contact_map):
     """
@@ -15,11 +18,12 @@ def printResults(contact_map):
     """
     print("----")
     for participant in contact_map.values():
-        print(participant.getName())
-        print(participant.getMessageCount())
-        print(participant.getWordCount())
-        print(participant.avgWords())
-        print("----")
+        print participant.getName()
+        print "Messages: ", participant.getMessageCount()
+        print "Words: ", participant.getWordCount()
+        print "Avg Words: ", participant.avgWords()
+        print "Messages initiaited: ", participant.getFirstMessageCount()
+        print "----"
 
 def analyze(filename):
     """
@@ -31,8 +35,8 @@ def analyze(filename):
 
     # Initialize variables
     contact_map = {}
-    msg_owner = "None"
     contact = None
+    prev_msg_time = None
 
     # Open the chat file in read-only
     file = open(filename, 'r')
@@ -43,6 +47,8 @@ def analyze(filename):
             if line.find(PREFIX) > -1 and line.find(SUFFIX) > -1:
                 # Beginning of a new message
                 msg_owner = line[line.find(PREFIX)+len(PREFIX):line.find(SUFFIX)]
+                time_string = line[:line.find(PREFIX)+1]
+                msg_time = time.strptime(time_string, "%m/%d/%y, %I:%M %p")
                 # Add new contact
                 if not msg_owner in contact_map:
                     contact_map[msg_owner] = Contact(msg_owner)
@@ -51,6 +57,11 @@ def analyze(filename):
                 contact.incrementMessages()
                 # Get message from line
                 line = line[line.find(SUFFIX)+len(SUFFIX):]
+                # Update time related analysis
+                if not prev_msg_time is None:
+                    if time.mktime(msg_time) - time.mktime(prev_msg_time) > FIRST_MESSAGE_TIME:
+                        contact.incrementFirstMessages()
+                prev_msg_time = msg_time
             if not contact is None:
                 # This is a message, increment contact words
                 contact.incrementWords(len(line.rsplit(" ")))
