@@ -26,6 +26,7 @@ def printResults(contact_map):
         print "Hourly count: ", participant.getHourlyMessageCount()
         print "Daily count: ", participant.getDailyMessageCount()
         print "Monthly count: ", participant.getMonthlyMessageCount()
+        print "Most common word: ", participant.getMostCommonWord()
         print "----"
 
 def analyze(filename):
@@ -68,7 +69,10 @@ def analyze(filename):
                 prev_msg_time = msg_time
             if not contact is None:
                 # This is a message, increment contact words
-                contact.incrementWords(len(line.rsplit(" ")))
+                word_list = line.rsplit(" ")
+                contact.incrementWords(len(word_list))
+                for word in word_list:
+                    contact.addWord(word)
     finally:
         # Close the chat file
         file.close()

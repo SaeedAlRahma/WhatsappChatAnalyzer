@@ -1,3 +1,5 @@
+import operator
+
 class Contact:
     def __init__(self, name):
         self.name = name
@@ -7,6 +9,7 @@ class Contact:
         self.hourly_message_count = [0] * 24
         self.daily_message_count = [0] * 7
         self.monthly_message_count = [0] * 12
+        self.words = {}
 
     def avgWords(self):
         """
@@ -44,6 +47,16 @@ class Contact:
         self.daily_message_count[time.tm_wday] += 1
         self.monthly_message_count[time.tm_mon-1] += 1
 
+    def addWord(self, word):
+        """
+        Add (or increment) word count.
+
+        :param str word: the word to add and increment
+        """
+        if not word in self.words:
+            self.words[word] = 0
+        self.words[word] += 1
+
     def getName(self):
         return self.name
 
@@ -64,3 +77,7 @@ class Contact:
 
     def getMonthlyMessageCount(self):
         return self.monthly_message_count
+
+    def getMostCommonWord(self):
+        sorted_words = sorted(self.words.items(), key=operator.itemgetter(1))
+        return sorted_words[-10:]
