@@ -4,6 +4,9 @@ class Contact:
         self.message_count = 0
         self.word_count = 0
         self.first_message_count = 0
+        self.hourly_message_count = [0] * 24
+        self.daily_message_count = [0] * 7
+        self.monthly_message_count = [0] * 12
 
     def avgWords(self):
         """
@@ -31,6 +34,16 @@ class Contact:
         """
         self.word_count += count
 
+    def incrementTimeCount(self, time):
+        """
+        Increment the messages time counter by 1.
+
+        :param time_struct time: Time stored in a time_struct
+        """
+        self.hourly_message_count[time.tm_hour] += 1
+        self.daily_message_count[time.tm_wday] += 1
+        self.monthly_message_count[time.tm_mon-1] += 1
+
     def getName(self):
         return self.name
 
@@ -42,3 +55,12 @@ class Contact:
 
     def getFirstMessageCount(self):
         return self.first_message_count
+
+    def getHourlyMessageCount(self):
+        return self.hourly_message_count
+
+    def getDailyMessageCount(self):
+        return self.daily_message_count
+
+    def getMonthlyMessageCount(self):
+        return self.monthly_message_count

@@ -23,6 +23,9 @@ def printResults(contact_map):
         print "Words: ", participant.getWordCount()
         print "Avg Words: ", participant.avgWords()
         print "Messages initiaited: ", participant.getFirstMessageCount()
+        print "Hourly count: ", participant.getHourlyMessageCount()
+        print "Daily count: ", participant.getDailyMessageCount()
+        print "Monthly count: ", participant.getMonthlyMessageCount()
         print "----"
 
 def analyze(filename):
@@ -61,6 +64,7 @@ def analyze(filename):
                 if not prev_msg_time is None:
                     if time.mktime(msg_time) - time.mktime(prev_msg_time) > FIRST_MESSAGE_TIME:
                         contact.incrementFirstMessages()
+                contact.incrementTimeCount(msg_time)
                 prev_msg_time = msg_time
             if not contact is None:
                 # This is a message, increment contact words
