@@ -1,0 +1,5 @@
+# Chat files
+*.txt
+
+# Python classes
+*.pyc
